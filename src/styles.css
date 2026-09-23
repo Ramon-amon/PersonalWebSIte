@@ -41,3 +41,41 @@ button:disabled { opacity: 0.6; cursor: default; }
   .eyebrow { font-size: 0.8125rem; letter-spacing: 0.08em; }
   .hero-actions { gap: 1.4rem; }
 }
+
+.section-description {
+  max-width: 55ch;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #d4deed;
+}
+/* Contenido comercial: menos pantallas vacías y lectura cómoda. */
+h1 { max-width: 15ch; font-size: clamp(2.8rem, 6vw, 6rem); }
+h2 { font-size: clamp(2.2rem, 4.5vw, 4.5rem); }
+.section:not(:first-child) { min-height: auto; padding-top: 5rem; padding-bottom: 6rem; border-top: 1px solid #ffffff15; }
+.section-content { width: min(100%, 68rem); }
+.section-description { text-shadow: 0 2px 8px #080a0f; }
+.service-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 2rem; }
+.service-card { background: #0c101bed; padding: 1.6rem; border: 1px solid #ffffff20; border-radius: 0.4rem; }
+h3 { font-size: 1.2rem; line-height: 1.4; margin: 0 0 0.8rem; }
+.service-card p { line-height: 1.7; color: #d4deed; }
+.service-card .detail { color: #aebdd3; font-size: 0.9rem; }
+.project-image { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: contain; background: #080a0f; border-radius: 0.25rem; margin-bottom: 1.25rem; }
+.whatsapp-floating { position: fixed; right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 20; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background: #25d366; color: #062d17; box-shadow: 0 4px 24px #0008; }
+.whatsapp-floating:hover { background: #57e58b; }
+footer { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); }
+@media (max-width: 700px) {
+  h1 { font-size: clamp(2.6rem, 10vw, 4.2rem); }
+  h2 { font-size: clamp(2rem, 8vw, 3rem); }
+  .service-grid { grid-template-columns: 1fr; }
+  .section:not(:first-child) { padding-top: 3rem; padding-bottom: 4rem; }
+}
+.gravity-cursor { display: none; position: fixed; top: -5px; left: -5px; width: 10px; height: 10px; border: 1px solid #ffd295; border-radius: 50%; background: #080a0f; box-shadow: 0 0 9px #ba80ff; pointer-events: none; z-index: 9999; }
+@media (hover: hover) and (pointer: fine) {
+  .gravity-active, .gravity-active * { cursor: none !important; }
+  .gravity-active .gravity-cursor { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gravity-active, .gravity-active * { cursor: auto !important; }
+  .gravity-active .gravity-cursor { display: none; }
+}

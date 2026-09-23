@@ -6,30 +6,19 @@ export function makeShapes(count) {
   return Array.from({ length: SHAPE_COUNT }, (_, shape) => {
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
+      // Stable scatter keeps the field open even halfway between sections.
+      const noise = seed => {
+        const value = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
+        return (value - Math.floor(value)) * 2 - 1;
+      };
       const t = i / (count - 1);
-      const angle = i * 2.399963229728653;
-      const radius = Math.sqrt(t) * 2.7;
-      let x, y, z;
-      if (shape === 0) {
-        x = Math.cos(angle) * radius; y = Math.sin(angle) * radius; z = Math.sin(i * 7.13) * 1.4;
-      } else if (shape === 1) {
-        y = (t - 0.5) * 4.5; x = Math.cos(t * Math.PI * 8) * 1.5; z = Math.sin(t * Math.PI * 8) * 1.5;
-      } else if (shape === 2) {
-        const group = i % 3 * Math.PI * 2 / 3;
-        x = Math.cos(group) * 1.65 + Math.cos(angle) * 0.75;
-        y = Math.sin(group) * 1.65 + Math.sin(angle) * 0.75; z = Math.sin(i * 3.7) * 0.7;
-      } else if (shape === 3) {
-        const side = Math.ceil(Math.sqrt(count));
-        x = (i % side / (side - 1) - 0.5) * 4;
-        y = (Math.floor(i / side) / (side - 1) - 0.5) * 4; z = Math.sin(x + y) * 0.5;
-      } else if (shape === 4) {
-        const ring = 1.8 + (i % 3) * 0.3;
-        x = Math.cos(angle) * ring; y = Math.sin(angle) * ring * 0.65; z = Math.sin(angle) * ring * 0.65;
-      } else {
-        const vertical = 1 - 2 * t;
-        const horizontal = Math.sqrt(Math.max(0, 1 - vertical * vertical));
-        x = Math.cos(angle) * horizontal * 1.6; y = vertical * 1.6; z = Math.sin(angle) * horizontal * 1.6;
-      }
+      const angle = t * Math.PI * 3.2;
+      const phase = shape * 0.9;
+      // Loose spiral arms: recognizable structure with irregular edges.
+      const radius = 0.2 + Math.sqrt(t) * 0.58;
+      const x = Math.cos(angle + phase) * radius + noise(i * 3 + 1) * 0.23;
+      const y = Math.sin(angle + phase) * radius + noise(i * 3 + 2) * 0.23;
+      const z = noise(i * 3 + 3) * 1.2 + Math.sin(i + phase) * 0.2;
       positions.set([x, y, z], i * 3);
     }
     return positions;
@@ -45,3 +34,4 @@ export function morphInto(output, shapes, progress) {
   const blend = fraction * fraction * (3 - 2 * fraction);
   for (let i = 0; i < output.length; i++) output[i] = a[i] + (b[i] - a[i]) * blend;
 }
+

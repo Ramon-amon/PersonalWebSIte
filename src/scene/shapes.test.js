@@ -1,6 +1,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { makeShapes, morphInto, SHAPE_COUNT } from './shapes.js';
+import { distortPoint } from './vortex.js';
+
+test('cursor attraction is finite, local and disappears at zero strength', () => {
+  assert.deepEqual(distortPoint(1, 2, 0, 0, 0), [1, 2, 0]);
+  assert.ok(distortPoint(0, 0, 0, 0, 1).every(Number.isFinite));
+  const [x, y, influence] = distortPoint(0.5, 0, 0, 0, 1);
+  assert.ok(Math.hypot(x, y) < 0.5);
+  assert.ok(y > 0 && influence > 0);
+  assert.ok(distortPoint(20, 20, 0, 0, 1)[2] < 1e-10);
+});
 
 test('figures remain finite and morphing is reversible with exact endpoints', () => {
   assert.throws(() => makeShapes(1), RangeError);
@@ -21,5 +31,18 @@ test('figures remain finite and morphing is reversible with exact endpoints', ()
     assert.ok(Math.abs(output[0] - (shapes[2][0] + shapes[3][0]) / 2) < 1e-6);
     morphInto(output, shapes, -1); assert.deepEqual(output, shapes[0]);
     morphInto(output, shapes, 99); assert.deepEqual(output, shapes.at(-1));
+  }
+});
+
+test('loose constellations retain extent without filling the viewport', () => {
+  const shapes = makeShapes(520);
+  const output = new Float32Array(520 * 3);
+  for (let progress = 0; progress <= 5; progress += 0.5) {
+    morphInto(output, shapes, progress);
+    for (const axis of [0, 1]) {
+      const values = Array.from({ length: 520 }, (_, i) => output[i * 3 + axis]);
+      assert.ok(Math.max(...values) - Math.min(...values) > 1.1);
+      assert.ok(values.every(value => Math.abs(value) < 1.02));
+    }
   }
 });

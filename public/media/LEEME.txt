@@ -1,0 +1,17 @@
+MULTIMEDIA DEL PORTAFOLIO
+
+Guarda las capturas de proyectos en la carpeta proyectos/.
+Puedes guardar otros recursos multimedia dentro de media/.
+Todo lo guardado aquí se publicará con la página: utiliza archivos destinados a mostrarse públicamente.
+
+En src/content.js, duplica y descomenta el ejemplo de projects:
+- title: nombre del proyecto.
+- description: problema que resuelve y tu participación.
+- image: media/proyectos/archivo.webp (sin public/ ni barra inicial).
+- imageAlt: descripción breve del contenido de la captura.
+- url: enlace HTTPS opcional; deja '' si no hay demo.
+
+Usa nombres sin espacios, por ejemplo sistema-inventario.webp.
+Se admiten WebP, PNG y JPG. Las capturas se muestran completas sin recortarlas.
+No necesitas una imagen de tamaño exacto; el espacio de presentación tiene proporción 8:5.
+Actualiza también la descripción de la sección Proyectos cuando añadas tus trabajos.
